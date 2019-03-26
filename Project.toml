@@ -1,0 +1,4 @@
+name = "RNN"
+uuid = "e554fe4a-da14-5d33-9027-958919ce6dc6"
+authors = ["Christian Dengler"]
+version = "0.1.0"
