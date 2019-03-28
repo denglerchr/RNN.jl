@@ -32,6 +32,22 @@ function hiddentozero!(c::Chain)
     return nothing
 end
 
+function numberofparameters(c::Chain)
+    nparams = 0
+    for l in c.layers
+        nparams += numberofparameters(l)
+    end
+    return nparams
+end
+
 function hiddentozero!(layer::Knet.RNN)
     layer.h = 0
+end
+
+function numberofparameters(layer::Knet.RNN)
+    if (layer.mode == 2 || layer.mode == 3)
+        return length(layer.w)
+    else
+        @error("This rnn type is not supported yet")
+    end
 end

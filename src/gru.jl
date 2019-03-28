@@ -109,3 +109,21 @@ end
 function hiddentozero!(layer::GRU)
     layer.h = zeros(length(layer.bRr))
 end
+
+function numberofparameters(layer::GRU)
+    # TODO maybe derive from nX and nH? But this should be ok also.
+    nparams = 0
+    nparams += length(layer.Wr)
+    nparams += length(layer.Wi)
+    nparams += length(layer.Wn)
+    nparams += length(layer.Rr)
+    nparams += length(layer.Ri)
+    nparams += length(layer.Rn)
+    nparams += length(layer.bWr)
+    nparams += length(layer.bWi)
+    nparams += length(layer.bWn)
+    nparams += length(layer.bRr)
+    nparams += length(layer.bRi)
+    nparams += length(layer.bRn)
+    return nparams
+end

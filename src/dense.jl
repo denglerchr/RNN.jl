@@ -34,3 +34,7 @@ end
 Dense(nIn::Int, nOut::Int; atype = Array{Float32}, activation = identity) = Dense(Knet.param(nOut, nIn; atype = atype), Knet.param0(nOut; atype = atype), activation, atype)
 
 hiddentozero!(layer::Dense) = nothing
+
+function numberofparameters(layer::Dense)
+    return length(layer.W) + length(layer.b)
+end

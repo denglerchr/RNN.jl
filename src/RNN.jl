@@ -17,7 +17,7 @@ include("dense.jl")
 export Dense
 
 include("chain.jl")
-export Chain, rnnconvert, hiddentozero!
+export Chain, rnnconvert, hiddentozero!, numberofparameters
 
 include("dataslicer.jl")
 export DataSlicer

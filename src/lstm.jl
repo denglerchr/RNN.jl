@@ -13,3 +13,8 @@ end
 function hiddentozero!(layer::LSTM)
     layer.h = zeros(length(layer.bRr))
 end
+
+function numberofparameters(layer::LSTM)
+    #todo
+    return -1
+end
