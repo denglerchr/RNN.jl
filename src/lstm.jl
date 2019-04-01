@@ -18,3 +18,9 @@ function numberofparameters(layer::LSTM)
     #todo
     return -1
 end
+
+function show(io::IO, layer::LSTM)
+    println("LSTM layer with $(numberofparameters(layer)) parameters")
+    #TODO
+    return nothing
+end

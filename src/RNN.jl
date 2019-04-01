@@ -5,6 +5,7 @@ module RNN
 
 using AutoGrad, Knet
 import Knet.rnnparams
+import Base.show
 
 # TODO
 include("lstm.jl")

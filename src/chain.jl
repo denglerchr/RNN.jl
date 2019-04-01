@@ -51,3 +51,11 @@ function numberofparameters(layer::Knet.RNN)
         @error("This rnn type is not supported yet")
     end
 end
+
+function show(io::IO, c::Chain)
+    println("NN chain with $(numberofparameters(c)) parameters. Layers:")
+    for l in c.layers
+        println(l)
+    end
+    return nothing
+end

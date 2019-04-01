@@ -127,3 +127,10 @@ function numberofparameters(layer::GRU)
     nparams += length(layer.bRn)
     return nparams
 end
+
+function show(io::IO, layer::GRU)
+    println("GRU layer with $(numberofparameters(layer)) parameters")
+    println("\t$(size(layer.Wr, 2)) Inputs")
+    println("\t$(size(layer.Rr, 1)) Outputs/Hidden state size")
+    return nothing
+end

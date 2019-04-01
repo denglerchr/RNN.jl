@@ -38,3 +38,10 @@ hiddentozero!(layer::Dense) = nothing
 function numberofparameters(layer::Dense)
     return length(layer.W) + length(layer.b)
 end
+
+function show(io::IO, layer::Dense)
+    println("Fully Connected layer with $(numberofparameters(layer)) parameters")
+    println("\t$(size(layer.W, 2)) Inputs")
+    println("\t$(size(layer.W, 1)) Outputs")
+    return nothing
+end
