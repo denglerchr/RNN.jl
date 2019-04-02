@@ -45,11 +45,7 @@ function hiddentozero!(layer::Knet.RNN)
 end
 
 function numberofparameters(layer::Knet.RNN)
-    if (layer.mode == 2 || layer.mode == 3)
-        return length(layer.w)
-    else
-        @error("This rnn type is not supported yet")
-    end
+    return length(layer.w)
 end
 
 function show(io::IO, c::Chain)
