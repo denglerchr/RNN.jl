@@ -8,13 +8,13 @@ end
 function rnnconvert(c::Chain; atype = Array{Float32})
     newlayers = Any[]
     for l in c.layers
-        nlayer = rnnconvert(l, atype)
+        nlayer = rnnconvert(l; atype = atype)
         push!(newlayers, nlayer)
     end
     return Chain(Tuple(newlayers))
 end
 
-function rnnconvert(layer::Knet.RNN, atype)
+function rnnconvert(layer::Knet.RNN; atype = Array{Float32})
     params = Knet.rnnparams(layer)
     if layer.mode == 2
         return LSTM(params; atype = atype)
@@ -48,10 +48,10 @@ function numberofparameters(layer::Knet.RNN)
     return length(layer.w)
 end
 
-function show(io::IO, c::Chain)
+function show(io::IO, c::Chain, depth::Int = 0)
     println("NN chain with $(numberofparameters(c)) parameters. Layers:")
     for l in c.layers
-        println(l)
+        show(io, l)
     end
     return nothing
 end

@@ -5,7 +5,7 @@ end
 
 rnnparams(lstm::LSTM) = nothing
 
-function rnnconvert(layer::LSTM, atype)
+function rnnconvert(layer::LSTM; atype = Array{Float32})
     params = rnnparams(layer)
     return LSTM(params; atype = atype)
 end
@@ -19,7 +19,7 @@ function numberofparameters(layer::LSTM)
     return -1
 end
 
-function show(io::IO, layer::LSTM)
+function show(io::IO, layer::LSTM, depth::Int = 0)
     println("LSTM layer with $(numberofparameters(layer)) parameters")
     #TODO
     return nothing

@@ -38,7 +38,7 @@ end
 
 function GRU(params::AbstractVector; h = 0x00, atype = Array{Float32})
     @assert(length(params) == 12)
-    p2 = similar(params)
+    p2 = Vector{atype}(undef, length(params))
     for i = 1:length(params)
         p2[i] = atype(copy(params[i]))
     end
@@ -101,7 +101,7 @@ function (gru::GRU)(X::Union{AbstractArray{<:Number, 3}, KnetArray{<:Number, 3}}
 end
 
 
-function rnnconvert(layer::GRU, atype)
+function rnnconvert(layer::GRU; atype = Array{Float32})
     params = rnnparams(layer)
     return GRU(params; atype = atype)
 end
@@ -128,9 +128,9 @@ function numberofparameters(layer::GRU)
     return nparams
 end
 
-function show(io::IO, layer::GRU)
+function show(io::IO, layer::GRU, depth::Int = 0)
     println("GRU layer with $(numberofparameters(layer)) parameters")
     println("\t$(size(layer.Wr, 2)) Inputs")
-    println("\t$(size(layer.Rr, 1)) Outputs/Hidden state size")
+    print("\t$(size(layer.Rr, 1)) Outputs/Hidden state size")
     return nothing
 end
