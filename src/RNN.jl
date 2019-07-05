@@ -7,6 +7,9 @@ using AutoGrad, Knet
 import Knet.rnnparams
 import Base.show
 
+include("rnn_tanh.jl")
+export RNN_TANH
+
 # TODO
 include("lstm.jl")
 export LSTM

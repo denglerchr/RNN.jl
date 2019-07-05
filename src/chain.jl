@@ -16,7 +16,10 @@ end
 
 function rnnconvert(layer::Knet.RNN; atype = Array{Float32})
     params = Knet.rnnparams(layer)
-    if layer.mode == 2
+    if layer.mode == 1
+        params[3] .+= params[4] # Add both biases together
+        return RNN_TANH(params[1:3], atype = atype)
+    elseif layer.mode == 2
         return LSTM(params; atype = atype)
     elseif layer.mode == 3
         return GRU(params; atype = atype)
