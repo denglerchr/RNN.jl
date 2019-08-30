@@ -19,6 +19,20 @@ function numberofparameters(layer::LSTM)
     return -1
 end
 
+function fillparams!(layer::LSTM, params::AbstractVector)
+    @assert numberofparameters(layer) == length(params)
+    fieldnames = [:a]
+    index = 1
+    for name in fieldnames
+        W = getfield(layer, name)
+        n = prod(size(W))
+        vec(W) .= params[index:index+n-1]
+        index += n
+    end
+    @assert index == length(params) + 1 # can be deleted, just used to make sure at first run
+    return layer
+end
+
 function show(io::IO, layer::LSTM, depth::Int = 0)
     println("LSTM layer with $(numberofparameters(layer)) parameters")
     #TODO

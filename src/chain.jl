@@ -4,7 +4,9 @@ struct Chain{T}
 end
 (c::Chain)(x) = (for l in c.layers; x = l(x); end; x)
 
-
+"""
+Change array type of every layer.
+"""
 function rnnconvert(c::Chain; atype = Array{Float32})
     newlayers = Any[]
     for l in c.layers
@@ -28,6 +30,32 @@ function rnnconvert(layer::Knet.RNN; atype = Array{Float32})
     end
 end
 
+"""
+Use a batch of data to create statistics for your layer inputs.
+Converts all batchnorm layers to be used for inference.
+"""
+function fill_batchnorm_stats(c::Chain, X)
+    # Check if there is a BatchNorm layer (is there an or function operator over arrays?)
+    temp = isa.(BatchNorm{false}, c.layers)
+    hasBN = !prod(.!(temp))
+
+    # Return current Chain if there is no BatchNorm layer
+    !hasBN && return c
+
+    # Else convert BatchNorm layer
+    layers = Array{Any}(undef, length(c.layers))
+    for (i, l) in enumerate(c.layers)
+        if isa(BatchNorm{false}, l)
+            layers[i] = BatchNorm{true}(X)
+        else
+            layers[i] = l
+        end
+        X = l(X)
+    end
+    return Chain(Tuple(layers))
+end
+
+
 function hiddentozero!(c::Chain)
     for l in c.layers
         hiddentozero!(l)
@@ -49,6 +77,33 @@ end
 
 function numberofparameters(layer::Knet.RNN)
     return length(layer.w)
+end
+
+"""
+Return all the parameters in a Chain or layer as a vector
+"""
+function rnnparamvec(c::Chain; dtype::DataType = Float32)
+    Out = Array{dtype}(undef, numberofparameters(c))
+    index = 1 # running index, where to write params of current layer
+    for l in c.layers
+        n = numberofparameters(l)
+        Out[index:index+n-1] .= rnnparamvec(l; dtype = dtype)
+        index += n
+    end
+    @assert index == length(Out)+1
+    return Out
+end
+
+function fillparams!(c::Chain, params::AbstractVector)
+    @assert numberofparameters(c) == length(params)
+    index = 1
+    for l in c.layers
+        n = numberofparameters(l)
+        fillparams!(l, view(params, index:index+n-1))
+        index += n
+    end
+    @assert index == length(params) + 1
+    return c
 end
 
 function show(io::IO, c::Chain, depth::Int = 0)

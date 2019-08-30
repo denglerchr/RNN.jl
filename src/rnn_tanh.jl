@@ -85,9 +85,27 @@ function numberofparameters(layer::RNN_TANH)
     return nparams
 end
 
+function rnnparamvec(layer::RNN_TANH; dtype = Float32)
+    return Array{dtype}(vcat(layer.Wx[:], layer.Wh[:], layer.b[:]))
+end
+
+function fillparams!(layer::RNN_TANH, params::AbstractVector)
+    @assert numberofparameters(layer) == length(params)
+    fieldnames = [:Wx, :Wh, :b]
+    index = 1
+    for name in fieldnames
+        W = getfield(layer, name)
+        n = prod(size(W))
+        vec(W) .= params[index:index+n-1]
+        index += n
+    end
+    @assert index == length(params) + 1 # can be deleted, just used to make sure at first run
+    return layer
+end
+
 function show(io::IO, layer::RNN_TANH, depth::Int = 0)
     println("RNN_TANH layer with $(numberofparameters(layer)) parameters")
     println("\t$(layer.nX) Inputs")
-    print("\t$(layer.nH) Outputs/Hidden state size")
+    println("\t$(layer.nH) Outputs/Hidden state size")
     return nothing
 end

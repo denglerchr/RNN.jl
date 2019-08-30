@@ -39,9 +39,27 @@ function numberofparameters(layer::Dense)
     return length(layer.W) + length(layer.b)
 end
 
+function rnnparamvec(layer::Dense; dtype = Float32)
+    return Array{dtype}(vcat(layer.W[:], layer.b[:]))
+end
+
+function fillparams!(layer::Dense, params::AbstractVector)
+    @assert numberofparameters(layer) == length(params)
+    fieldnames = [:W, :b]
+    index = 1
+    for name in fieldnames
+        W = getfield(layer, name)
+        n = prod(size(W))
+        vec(W) .= params[index:index+n-1]
+        index += n
+    end
+    @assert index == length(params) + 1 # can be deleted, just used to make sure at first run
+    return layer
+end
+
 function show(io::IO, layer::Dense, depth::Int = 0)
     println("Fully Connected layer with $(numberofparameters(layer)) parameters")
     println("\t$(size(layer.W, 2)) Inputs")
-    print("\t$(size(layer.W, 1)) Outputs")
+    println("\t$(size(layer.W, 1)) Outputs")
     return nothing
 end

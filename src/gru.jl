@@ -128,9 +128,27 @@ function numberofparameters(layer::GRU)
     return nparams
 end
 
+function rnnparamvec(layer::GRU; dtype = Float32)
+    return Array{dtype}(vcat(layer.Wr, layer.Wi, layer.Wn, layer.Rr, layer.Ri, layer.Rn, layer.bWr, layer.bWi, layer.bWn, layer.bRr, layer.bRi, layer.bRn))
+end
+
+function fillparams!(layer::GRU, params::AbstractVector)
+    @assert numberofparameters(layer) == length(params)
+    fieldnames = [:Wr, :Wi, :Wn, :Rr, :Ri, :Rn, :bWr, :bWi, :bWn, :bRr, :bRi, :bRn]
+    index = 1
+    for name in fieldnames
+        W = getfield(layer, name)
+        n = prod(size(W))
+        vec(W) .= params[index:index+n-1]
+        index += n
+    end
+    @assert index == length(params) + 1 # can be deleted, just used to make sure at first run
+    return layer
+end
+
 function show(io::IO, layer::GRU, depth::Int = 0)
     println("GRU layer with $(numberofparameters(layer)) parameters")
     println("\t$(size(layer.Wr, 2)) Inputs")
-    print("\t$(size(layer.Rr, 1)) Outputs/Hidden state size")
+    println("\t$(size(layer.Rr, 1)) Outputs/Hidden state size")
     return nothing
 end
