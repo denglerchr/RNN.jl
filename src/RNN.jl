@@ -3,7 +3,7 @@
 # The main reason this exists if for faster CPU inference in the context of RL
 module RNN
 
-using AutoGrad, Knet
+using AutoGrad, Knet, Statistics
 import Knet.rnnparams
 import Base.show
 
@@ -20,8 +20,11 @@ export GRU, rnnparams
 include("dense.jl")
 export Dense
 
+include("batchnorm.jl")
+export BatchNorm
+
 include("chain.jl")
-export Chain, rnnconvert, hiddentozero!, numberofparameters
+export Chain, rnnconvert, fill_batchnorm_stats, hiddentozero!, numberofparameters, rnnparamvec, fillparams!
 
 include("dataslicer.jl")
 export DataSlicer
