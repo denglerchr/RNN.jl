@@ -22,9 +22,11 @@ end
 
 # Create an inference BatchNorm layer from a Dataset
 function BatchNorm{true}(X) where {T}
-    m = vec(mean(X, dims = 2:ndims(X)))
-    u = vec(std(X, dims = 2:ndims(X)))
-    return BatchNorm(m, u, Val(true))
+    m = mean(X, dims = 2:ndims(X))
+    mvec = vec(m)
+    u = std(X, dims = 2:ndims(X); mean = m)
+    uvec = vec(u)
+    return BatchNorm(mvec, uvec, Val(true))
 end
 
 # Create a batchnorm for training
@@ -37,7 +39,7 @@ BatchNorm() = BatchNorm{false}()
 # Used for training
 function (l::BatchNorm{false})(X)
     m = mean(X, dims = 2)
-    u = std(X, dims = 2)
+    u = std(X, dims = 2; mean  = m)
     return  (X .- m)./u
 end
 
@@ -50,7 +52,7 @@ function rnnconvert(layer::BatchNorm{true}; atype = Array{Float32})
     return BatchNorm(m, u, Val(true))
 end
 
-rnnconvert(layer::BatchNorm{false}; atype = Array{Float32}) = BatchNorm(nothing, nothing, Val(false))
+rnnconvert(layer::BatchNorm{false}; atype = Array{Float32}) = BatchNorm(Val(false))
 
 hiddentozero!(layer::BatchNorm) = nothing
 
