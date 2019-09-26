@@ -45,7 +45,7 @@ function GRU(params::AbstractVector; h = 0x00, atype = Array{Float32})
     # TODO check size consistency of the params
     nX = size(p2[1], 1)
     nH = size(p2[4], 1)
-    return GRU(p2... , h, typeof(Knet.value(p2[1])), nX, nH)
+    return GRU(p2... , h, eltype([Knet.value(p) for p in p2]), nX, nH)
 end
 
 # for consistency with Knet
@@ -107,7 +107,7 @@ function rnnconvert(layer::GRU; atype = Array{Float32})
 end
 
 function hiddentozero!(layer::GRU)
-    layer.h = zeros(length(layer.bRr))
+    layer.h = 0x00
 end
 
 function numberofparameters(layer::GRU)

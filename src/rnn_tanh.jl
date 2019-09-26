@@ -27,7 +27,7 @@ function RNN_TANH(params::AbstractVector; h = 0x00, atype = Array{Float32})
     # TODO check size consistency of the params
     nX = size(p2[1], 1)
     nH = size(p2[2], 1)
-    return RNN_TANH(p2... , h, typeof(Knet.value(p2[1])), nX, nH)
+    return RNN_TANH(p2... , h, eltype([Knet.value(p) for p in p2]), nX, nH)
 end
 
 # for consistency with Knet
@@ -54,7 +54,7 @@ end
 function (rnn::RNN_TANH)(X::Union{AbstractArray{<:Number, 3}, KnetArray{<:Number, 3}})
     # If h is not given, set h to zero temporarily
     no_h = (rnn.h == 0x00)
-    no_h ? rnn.h = rnn.atype( zeros(rnn.nH, size(X, 2)) ) : nothing # set a h temporarily
+    no_h ? rnn.h = rnn.atype( zeros(eltype(rnn.atype), rnn.nH, size(X, 2)) ) : nothing # set a h temporarily
 
     # Perform forward pass
     hout = rnn.atype(undef, rnn.nH, size(X, 2), size(X, 3))
@@ -74,7 +74,7 @@ function rnnconvert(layer::RNN_TANH; atype = Array{Float32})
 end
 
 function hiddentozero!(layer::RNN_TANH)
-    layer.h = zeros(layer.nH)
+    layer.h = 0x00
 end
 
 function numberofparameters(layer::RNN_TANH)
