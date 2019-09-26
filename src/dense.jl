@@ -28,7 +28,7 @@ end
 function rnnconvert(layer::Dense; atype = Array{Float32})
     newW = atype(value(layer.W))
     newb = atype(value(layer.b))
-    return Dense(newW, newb, layer.f, atype)
+    return Dense(newW, newb, layer.f, typeof(newW))
 end
 
 Dense(nIn::Int, nOut::Int; atype = Array{Float32}, activation = identity) = Dense(Knet.param(nOut, nIn; atype = atype), Knet.param0(nOut; atype = atype), activation, atype)

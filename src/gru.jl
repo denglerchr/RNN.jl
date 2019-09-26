@@ -38,14 +38,14 @@ end
 
 function GRU(params::AbstractVector; h = 0x00, atype = Array{Float32})
     @assert(length(params) == 12)
-    p2 = Vector{atype}(undef, length(params))
+    p2 = Vector{Any}(undef, length(params))
     for i = 1:length(params)
         p2[i] = atype(copy(params[i]))
     end
     # TODO check size consistency of the params
     nX = size(p2[1], 1)
     nH = size(p2[4], 1)
-    return GRU(p2... , h, atype, nX, nH)
+    return GRU(p2... , h, typeof(p2[1]), nX, nH)
 end
 
 # for consistency with Knet
