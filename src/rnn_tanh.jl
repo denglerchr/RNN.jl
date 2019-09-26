@@ -27,7 +27,7 @@ function RNN_TANH(params::AbstractVector; h = 0x00, atype = Array{Float32})
     # TODO check size consistency of the params
     nX = size(p2[1], 1)
     nH = size(p2[2], 1)
-    return RNN_TANH(p2... , h, typeof(p2[1]), nX, nH)
+    return RNN_TANH(p2... , h, typeof(Knet.value(p2[1])), nX, nH)
 end
 
 # for consistency with Knet
