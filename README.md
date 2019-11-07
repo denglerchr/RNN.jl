@@ -16,7 +16,7 @@ Beide Layer in ein Netz zusammenpacken:
   nn = Chain( (layer1, layer2) )
   ```
 
-Auswerten des neuronalen Netzes (Funktionniert für Vektoren oder auch höherdimensionale Objekte)
+Auswerten des neuronalen Netzes (Funktioniert für Vektoren oder auch höherdimensionale Objekte)
 
   ```julia
   x = randn(5)
