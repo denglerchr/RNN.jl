@@ -16,11 +16,14 @@ Beide Layer in ein Netz zusammenpacken:
   nn = Chain( (layer1, layer2) )
   ```
 
-Auswerten des neuronalen Netzes
+Auswerten des neuronalen Netzes (Funktionniert für Vektoren oder auch höherdimensionale Objekte)
 
   ```julia
   x = randn(5)
   y = nn(x)
+
+  X = randn(5, 10) # 10 Datenpunkte der passenden Größe (jede Spalte 1 Datenpunkte)
+  Y = nn(X) # 10 Eingänge auf einmal auswerten
   ```
 
 Konvertieren der *Param{Array{Float32}}* zu *Array{Float64}*
