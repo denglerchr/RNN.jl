@@ -26,5 +26,7 @@ Auswerten des neuronalen Netzes
 Konvertieren der *Param{Array{Float32}}* zu *Array{Float64}*
 
   ```julia
+  println( typeof(nn.layers[1].W) )
   nn2 = rnnconvert(nn; atype = Array{Float64})
+  println( typeof(nn2.layers[1].W) )
   ```
