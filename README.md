@@ -6,8 +6,14 @@ Paket für eine einfache Erstellung und Nutzung von (rekurrenten) neuronalen Net
 Layer definieren, hier nur Dense:
   ```julia
   using RNN
+
+  # Create Array{Float32} as default
   layer1 = Dense(5, 16; activation = tanh)
   layer2 = Dense(16, 2) # activation = identity
+
+  # For Array{Float64} or KnetArray, use "atype" argument
+  layer1 = Dense(5, 16; atype = Array{Float64}, activation = tanh)
+  layer2 = Dense(16, 2; atype = Array{Float64}) # activation = identity
   ```
 
 Beide Layer in ein Netz zusammenpacken:
