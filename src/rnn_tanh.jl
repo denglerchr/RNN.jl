@@ -12,7 +12,7 @@ end
 # Constructor for training
 function RNN_TANH(nX::Number, nH::Number; atype = Array{Float32})
     Wx = Knet.param(nX, nH; atype = atype)
-    Wh = Knet.param(nX, nH; atype = atype)
+    Wh = Knet.param(nH, nH; atype = atype)
     b = Knet.param0(nH; atype = atype)
     h = 0x00
     return RNN_TANH(Wx, Wh, b, h, atype, nX, nH)
